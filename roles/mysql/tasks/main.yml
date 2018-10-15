@@ -1,0 +1,60 @@
+---
+# tasks file for mysql
+- name: Install Mysql
+  yum: name={{item}} state=latest
+  with_items:
+  - mariadb
+  - mariadb-server
+  - MySQL-python
+
+- name: Start MariaDB
+  service: name=mariadb state=started
+
+#- debug:
+#   msg: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+
+#- debug:
+#   var: passwd_gen1
+
+- set_fact:
+   my_pass: "{{ passwd_gen1 }}"
+
+- debug:
+   var: my_pass
+
+#- debug:
+#  var: my_pass1
+
+#- name: create a mysql user with a random password
+#  mysql_user:
+#    name: "{{ client }}"
+#    password: "{{ lookup('password', 'credentials/' + client + '/mysqlpassword length=15') }}"
+#    priv: "{{ dbname }}.*:ALL"
+#  register: dbcreate
+
+#- name: Create users with auto generated password
+#  mysql_user:
+#    name: "{{ username }}"
+#    password: "{{ lookup('password', 'credentials/' + username + '/dbpassword.txt encrypt=md5_crypt')}}"
+#    register: dbcreate
+
+#- debug:
+#  var: dbcreate
+- name: Create User
+  mysql_user:
+    name: "{{dbuser}}"
+    password: "{{my_pass}}"
+    priv: '*.*:ALL'
+    state: present
+#  register: dbuser
+
+#- debug:
+#  var: mysql_user.password
+
+- name: Create databases
+  mysql_db:
+    name: "{{ dbname }}"
+    login_user: "{{dbuser}}"
+    login_password: "{{my_pass}}"
+    state: present
+

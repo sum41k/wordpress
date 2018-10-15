@@ -1,0 +1,20 @@
+#Making a comment in my hosts file
+
+#rainbows.unicorns.com
+
+[testServer]
+#192.168.247.131 ansible_user=root ansible_ssh_pass=1234
+#
+192.168.247.139 ansible_user=root ansible_ssh_pass=1234
+#192.168.247.138 ansible_user=root ansible_ssh_pass=1234
+#test1.example.com:5555
+
+#[testServer:vars]
+#ansible_user=root
+
+#[webServers]
+#apache[01:50].example.com
+#nginx[50:100].example.com
+
+#[appServers]
+#app[a:f].example.com

@@ -1,0 +1,31 @@
+---
+- name: Install Mysql
+  yum: name={{item}} state=latest
+  with_items:
+  - mariadb
+  - mariadb-server
+  - MySQL-python
+
+- name: Start MariaDB
+  service: name=mariadb state=started
+
+- set_fact:
+   my_pass: "{{ passwd_gen1 }}"
+
+- debug:
+   var: my_pass
+
+- name: Create User
+  mysql_user:
+    name: "{{dbuser}}"
+    password: "{{my_pass}}"
+    priv: '*.*:ALL'
+    state: present
+
+- name: Create databases
+  mysql_db:
+    name: "{{ dbname }}"
+    login_user: "{{dbuser}}"
+    login_password: "{{my_pass}}"
+    state: present
+

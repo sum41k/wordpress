@@ -1,0 +1,32 @@
+---
+- set_fact:
+   wp_pass: "{{ passwd_gen1 }}"
+
+- debug:
+   var: wp_pass
+
+- name: Download wp-core.phar
+  get_url:
+   url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+   validate_certs: no
+   dest: /usr/bin/wp
+   mode: 0755
+
+- name: Download Wordpresss
+  shell: wp core download --path=/var/www/sum41k/data/www/sum41k.com/
+
+- name: Create wp-config.php
+  shell: wp core config --dbname="{{dbname}}" --dbuser="{{dbuser}}" --dbpass="{{my_pass}}" --dbhost=localhost --dbprefix=wp_ --path=/var/www/sum41k/data/www/sum41k.com/
+
+- name: Install Wordpress
+  shell: wp core install --url=http://sum41k.com --title=Sum41k.com --admin_user="{{dbuser}}" --admin_password="{{wp_pass}}" --admin_email=info@sum41k.com --path=/var/www/sum41k/data/www/sum41k.com/
+  register: wpcredentials
+  
+#- name: wordpress fix ownerships
+#  file: path=/var/www/sum41k/data/www/sum41k.com/ owner=sum41k group=sum41k state=directory recurse=yes
+
+- debug: 
+   var: dbcredentials
+
+- name: PostInstall
+  debug: msg=" Here is your credentials DBUser:{{dbuser}} DBPass:{{my_pass}} DBName:{{dbname}} WPUser:{{dbuser}} WPPassword:{{wp_pass}} http://sum41k.com "

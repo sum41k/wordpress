@@ -1,0 +1,5 @@
+---
+- name: Create_DB
+  include: mysql.yml
+- name: Create_WP
+  include: wpcore.yml

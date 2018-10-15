@@ -1,0 +1,23 @@
+---
+- name: Wordpress Playbook
+  hosts: testServer
+  remote_user: root
+  become: yes 
+#  vars:
+#    passwd_gen1: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+  #  domain_name: [www-root, big-dick.com]   
+  #roles:
+  #- { role: nginx_proxy, domain_owner: www-root, domain_name: [testdomain.com, bigdick.com] }
+  tasks:
+  - include_role:
+     name: wordpress
+    vars:
+     dbuser: 'wpuser'
+     dbname: 'wp_db'
+#     domain_name: ['bigdick.com','trah.com','ilovedicks.net','pornhub.com']
+  #- role: nginx_proxy
+  #  domain_name: "{{item}}"
+  #  with_items:
+  #  - test.com 
+  #  - bigdick.com
+  #  domain_owner: www-root
